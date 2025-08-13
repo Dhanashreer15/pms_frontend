@@ -1,0 +1,128 @@
+<div class="container mt-4">
+
+  <!-- Header with Add Button -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Portfolio Dashboard</h2>
+    <button class="btn btn-success" (click)="showPortfolioForm = true">
+      + Add Portfolio
+    </button>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading">Loading portfolios...</div>
+
+  <!-- Portfolio Table -->
+  <table *ngIf="!isLoading && portfolios.length" class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Currency</th>
+        <th>Benchmark</th>
+        <th>Exchange</th>
+        <th>Initial Investment</th>
+        <th>Current Value</th>
+        <th>Frequency</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let portfolio of portfolios">
+        <td>{{ portfolio.name }}</td>
+        <td>{{ portfolio.type }}</td>
+        <td>{{ portfolio.currency }}</td>
+        <td>{{ portfolio.benchmark }}</td>
+        <td>{{ portfolio.exchange }}</td>
+        <td>{{ portfolio.initialInvestment | currency: portfolio.currency }}</td>
+        <td>{{ portfolio.currentValue | currency: portfolio.currency }}</td>
+        <td>{{ portfolio.rebalancingFrequency }}</td>
+        <td>{{ portfolio.status }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deletePortfolio(portfolio.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- No Portfolios Message -->
+  <div *ngIf="!isLoading && portfolios.length === 0">
+    No portfolios found.
+  </div>
+
+  <!-- Portfolio Form (Shown on Add Button Click) -->
+  <div *ngIf="showPortfolioForm" class="card mt-4">
+    <div class="card-header">Create Portfolio</div>
+    <div class="card-body">
+      <form (ngSubmit)="createPortfolio()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label>Name</label>
+            <input class="form-control" [(ngModel)]="newPortfolio.name" name="name" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Type</label>
+            <input class="form-control" [(ngModel)]="newPortfolio.type" name="type" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Currency</label>
+            <input class="form-control" [(ngModel)]="newPortfolio.currency" name="currency" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Benchmark</label>
+            <input class="form-control" [(ngModel)]="newPortfolio.benchmark" name="benchmark">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Exchange</label>
+            <input class="form-control" [(ngModel)]="newPortfolio.exchange" name="exchange">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Initial Investment</label>
+            <input type="number" class="form-control" [(ngModel)]="newPortfolio.initialInvestment" name="initialInvestment">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Current Value</label>
+            <input type="number" class="form-control" [(ngModel)]="newPortfolio.currentValue" name="currentValue">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Rebalancing Frequency</label>
+            <input class="form-control" [(ngModel)]="newPortfolio.rebalancingFrequency" name="rebalancingFrequency">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Status</label>
+            <input class="form-control" [(ngModel)]="newPortfolio.status" name="status">
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit Portfolio</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Theme Form (Shown After Portfolio Creation) -->
+  <div *ngIf="showThemeForm" class="card mt-4">
+    <div class="card-header">Add Theme Allocation</div>
+    <div class="card-body">
+      <form (ngSubmit)="submitTheme()">
+        <div class="mb-3">
+          <label>Theme Name</label>
+          <input class="form-control" [(ngModel)]="theme.name" name="themeName" required>
+        </div>
+        <div class="mb-3">
+          <label>Description</label>
+          <textarea class="form-control" [(ngModel)]="theme.description" name="description"></textarea>
+        </div>
+        <div class="mb-3">
+          <label>Risk Level</label>
+          <input class="form-control" [(ngModel)]="theme.riskLevel" name="riskLevel">
+        </div>
+        <div class="mb-3">
+          <label>Investment Horizon</label>
+          <input class="form-control" [(ngModel)]="theme.investmentHorizon" name="investmentHorizon">
+        </div>
+        <button class="btn btn-success" type="submit">Submit Theme</button>
+      </form>
+    </div>
+  </div>
+
+</div>
